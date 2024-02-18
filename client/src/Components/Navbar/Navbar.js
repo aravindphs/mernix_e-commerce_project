@@ -2,14 +2,16 @@ import React, { useContext, useRef, useState } from "react";
 import "./Navbar.css";
 import Logo from "../Assets/logo.png";
 import cart_icon from "../Assets/cart_icon.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
 import drop_down_icon from "../Assets/drop_down.png";
+import {} from "react-router-dom"
 
 const Navbar = () => {
   const [menu, setMenu] = useState("shop");
   const { getTotalCartItems } = useContext(ShopContext);
   const menuRef = useRef();
+  const navigate = useNavigate()
 
   const dropDown_toggle = (e) => {
     menuRef.current.classList.toggle("nav-menu-visible");
@@ -74,9 +76,21 @@ const Navbar = () => {
       </ul>
 
       <div className="nav-login-cart">
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
+        {localStorage.getItem("auth-token") ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("auth-token");
+              navigate("/")
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
+        )}
+
         <Link to="/cart">
           <img src={cart_icon} alt="" />
         </Link>
